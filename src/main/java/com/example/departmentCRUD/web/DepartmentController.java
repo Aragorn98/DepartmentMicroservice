@@ -7,6 +7,7 @@ import com.example.departmentCRUD.repository.PaginationDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.naming.NameNotFoundException;
 import javax.validation.Valid;
 
 //end::baseClass[]
@@ -48,6 +49,7 @@ public class DepartmentController {
 
     @GetMapping("/find")
     public Iterable<Department> findDepartments(@RequestParam String searchText) {
+        System.out.println(searchText);
         return departmentRepository.findDepartmentByName(searchText);
     }
 
@@ -64,19 +66,16 @@ public class DepartmentController {
 //                "Teacher '" + username + "' not found");
 //    }
 
-//    @GetMapping("/userID/{id}")
-//    public Department getUserById(@PathVariable("id") long id) throws UsernameNotFoundException {
-//        System.out.println("HomeController.getUserByUsername");
-//        System.out.println("id = " + id);
-//        System.out.println("userRepository = " + departmentRepository.findAll());
-//        Department editTimetable = departmentRepository.findById(id)
-//                .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
-//        if (editTimetable != null) {
-//            return editTimetable;
-//        }
-//        throw new UsernameNotFoundException(
-//                "Teacher '" + id + "' not found");
-//    }
+    @GetMapping("/departmentID/{id}")
+    public Department getDepartmentById(@PathVariable("id") long id) throws NameNotFoundException {
+        Department department = departmentRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+        if (department != null) {
+            return department;
+        }
+        throw new NameNotFoundException(
+                "Teacher '" + id + "' not found");
+    }
 
 
     @PostMapping("/department/add")
